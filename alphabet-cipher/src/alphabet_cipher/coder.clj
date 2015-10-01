@@ -6,17 +6,17 @@
 (defn pos [c]
   (- (int c) (int \a)))
 
+(defn chart [op a b]
+  (nth (alphabet) (mod (op (pos a) (pos b)) (count (alphabet)))))
+
 (defn en-chart [c r]
-  (nth (alphabet) (mod (+ (pos r) (pos c)) 26)))
+  (chart + r c))
 
 (defn de-chart [c r]
-  (nth (alphabet) (mod (- (pos r) (pos c)) 26)))
+  (chart - r c))
 
 (defn dec-chart [c r]
-  (nth (alphabet) (mod (- (pos c) (pos r)) 26)))
-
-(defn r-take [s n]
-  (take n s))
+  (chart - c r))
 
 (defn pad [string n]
   (subs (apply str (concat (repeat (/ n (count string)) string))) 0 n))
@@ -28,7 +28,7 @@
       (map
         (partial apply str)
         (map
-          (partial r-take s)
+          (fn[x] (take x s))
           (range 1 (+ 1 (count s))))))))
 
 (defn encode [keyword message]
